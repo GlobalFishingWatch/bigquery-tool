@@ -32,7 +32,7 @@ func init() {
 	viper.BindPFlag("create-temporal-table-dataset-id", createTemporalTableCmd.Flags().Lookup("temp-dataset-id"))
 	viper.BindPFlag("create-temporal-table-name", createTemporalTableCmd.Flags().Lookup("temp-table-name"))
 	viper.BindPFlag("create-temporal-table-ttl", createTemporalTableCmd.Flags().Lookup("temp-table-ttl"))
-	viper.BindPFlag("create-temporal-temp-table-schema", createTemporalTableCmd.Flags().Lookup("temp-table-schema"))
+	viper.BindPFlag("create-temporal-table-schema", createTemporalTableCmd.Flags().Lookup("temp-table-schema"))
 
 	rootCmd.AddCommand(createTemporalTableCmd)
 }
