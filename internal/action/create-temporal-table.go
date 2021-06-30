@@ -52,7 +52,8 @@ func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) 
 	if err != nil {
 		log.Fatal("→ BQ →→ Error creating temporary table", err)
 	}
-
+	query.QueryConfig.Dst = dstTable
+	log.Println("→ BQ →→ Exporting query to intermediate table")
 	job, err := query.Run(context.Background())
 	checkBigQueryJob(job, err)
 	config, err := job.Config()
