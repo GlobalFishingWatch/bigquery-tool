@@ -22,6 +22,7 @@ func ExecuteRawSql(params types.ExecuteRaqSqlParams) {
 
 
 func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) {
+	log.Printf("→ BQ →→ Query: %v", params.Query)
 	query := bigQueryClient.Query(params.Query)
 	query.AllowLargeResults = true
 
@@ -41,6 +42,7 @@ func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) 
 	}
 	log.Printf("→ BQ →→ Temporal table TTL: %v", ttlParsed)
 
+	log.Printf("→ BQ →→ Schema: %v", params.Schema)
 	var tableMetadata *bigquery.TableMetadata
 	if params.Schema == "" {
 		tableMetadata = &bigquery.TableMetadata{ExpirationTime: time.Now().Add(ttlParsed)}

@@ -59,8 +59,6 @@ Example:
 			TTL:            viper.GetInt("create-temporal-table-ttl"),
 			Schema:         viper.GetString("create-temporal-table-schema"),
 		}
-		log.Println(params)
-
 		action.ExecuteRawSql(params)
 		log.Println("→ Executing create temporal table finished")
 	},
