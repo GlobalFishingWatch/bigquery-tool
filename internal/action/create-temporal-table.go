@@ -22,6 +22,8 @@ func ExecuteRawSql(params types.ExecuteRaqSqlParams) {
 
 
 func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) {
+	log.Printf("→ BQ →→ Query: %s", params.Query)
+
 	query := bigQueryClient.Query(params.Query)
 	query.AllowLargeResults = true
 
