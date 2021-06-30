@@ -57,7 +57,7 @@ Example:
 			TempTableName:  viper.GetString("create-temporal-table-name"),
 			TempDatasetId:  viper.GetString("create-temporal-table-dataset-id"),
 			TTL:            viper.GetInt("create-temporal-table-ttl"),
-			Schema:          viper.GetInt("create-temporal-table-schema"),
+			Schema:         viper.GetString("create-temporal-table-schema"),
 		}
 		log.Println(params)
 
