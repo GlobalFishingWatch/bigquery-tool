@@ -29,10 +29,6 @@ func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) 
 	log.Printf("→ BQ →→ Temporal table name: %s:%s.%s", params.ProjectId, params.TempDatasetId, params.TempTableName)
 	dstTable := bigQueryClient.Dataset(params.TempDatasetId).Table(params.TempTableName)
 
-	schemaParsed, err := bigquery.SchemaFromJSON([]byte(params.Schema))
-	if err != nil {
-		log.Fatalf("→ BQ →→ Error getting Schema from JSON %s", err)
-	}
 
 	var ttlParsed time.Duration
 	if params.TTL == 0 {
@@ -47,10 +43,14 @@ func createTemporalTable(ctx context.Context, params types.ExecuteRaqSqlParams) 
 	if params.Schema == "" {
 		tableMetadata = &bigquery.TableMetadata{ExpirationTime: time.Now().Add(ttlParsed)}
 	} else {
+		schemaParsed, err := bigquery.SchemaFromJSON([]byte(params.Schema))
+		if err != nil {
+			log.Fatalf("→ BQ →→ Error getting Schema from JSON %s", err)
+		}
 		tableMetadata = &bigquery.TableMetadata{Schema: schemaParsed, ExpirationTime: time.Now().Add(ttlParsed)}
 	}
 
-	err = dstTable.Create(ctx, tableMetadata)
+	err := dstTable.Create(ctx, tableMetadata)
 	if err != nil {
 		log.Fatal("→ BQ →→ Error creating temporary table", err)
 	}
