@@ -5,5 +5,6 @@ type ExecuteRaqSqlParams struct {
 	ProjectId 	  string
 	TempDatasetId string
 	TempTableName string
+	Schema        string
 	TTL           int
 }

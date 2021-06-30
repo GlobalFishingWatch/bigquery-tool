@@ -20,6 +20,7 @@ func init() {
 	createTemporalTableCmd.MarkFlagRequired("temp-table-name")
 
 	createTemporalTableCmd.Flags().StringP("temp-table-ttl", "", "", "TTL of the destination table (hours) (optional, default: 12h)")
+	createTemporalTableCmd.Flags().StringP("temp-table-schema", "", "", "The schema of the destination table")
 
 	createTemporalTableCmd.Flags().StringP("query", "", "", "The query to execute")
 	createTemporalTableCmd.MarkFlagRequired("query")
@@ -31,6 +32,7 @@ func init() {
 	viper.BindPFlag("create-temporal-table-dataset-id", createTemporalTableCmd.Flags().Lookup("temp-dataset-id"))
 	viper.BindPFlag("create-temporal-table-name", createTemporalTableCmd.Flags().Lookup("temp-table-name"))
 	viper.BindPFlag("create-temporal-table-ttl", createTemporalTableCmd.Flags().Lookup("temp-table-ttl"))
+	viper.BindPFlag("create-temporal-temp-table-schema", createTemporalTableCmd.Flags().Lookup("temp-table-schema"))
 
 	rootCmd.AddCommand(createTemporalTableCmd)
 }
@@ -55,6 +57,7 @@ Example:
 			TempTableName:  viper.GetString("create-temporal-table-name"),
 			TempDatasetId:  viper.GetString("create-temporal-table-dataset-id"),
 			TTL:            viper.GetInt("create-temporal-table-ttl"),
+			Schema:          viper.GetInt("create-temporal-table-schema"),
 		}
 		log.Println(params)
 
