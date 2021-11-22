@@ -57,3 +57,34 @@ When you execute this command, under the hood happens the followings steps:
 * The CLI creates a temporal table
 * The CLI adds ttl to the created table
 * The CLI executes the SQL query and insert the rows
+---
+
+### Command: [create-table]
+
+The create-table command allows you to generate a table from a Query.
+
+#### Flags
+##### Required flags
+- `--project-id=` the project id of the destination table.
+- `--dataset-id=` The destination dataset.
+- `--table-name=` The destination name table.
+- `--query=`SQL query to get rows from BigQuery.
+
+##### Optional flags
+
+
+#### Example
+Here an example of this command:
+```
+bigquery create-temporal table \
+   --project-id="world-fishing-827" \
+   --dataset-id="scratch_alvaro" \ 
+   --table-name="test-tool" \
+   --query="SELECT event_id FROM \`world-fishing-827.scratch_alvaro.published_events_fishing\` LIMIT 2"  
+```
+
+When you execute this command, under the hood happens the followings steps:
+* The CLI creates a temporal table
+* The CLI adds ttl to the created table
+* The CLI executes the SQL query and insert the rows
+
