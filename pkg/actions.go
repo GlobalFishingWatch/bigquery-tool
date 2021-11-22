@@ -12,3 +12,7 @@ func CreateTable(params types.ExecuteCreateTableParams) {
 func CreateTemporalTable(params types.ExecuteCreateTemporalTableParams) {
 	action.ExecuteCreateTemporalTable(params)
 }
+
+func ExecuteRawQuery(params types.ExecuteRawQueryParams) {
+	action.ExecuteRawQuery(params)
+}
