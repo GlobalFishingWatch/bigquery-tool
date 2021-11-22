@@ -37,9 +37,9 @@ var createTableCmd = &cobra.Command{
 	Short: "Execute raw sql",
 	Long:  `Execute raw sql
 Format:
-	postgres create-table --project-id= --sql= 
+	bigquery create-table --project-id= --sql= 
 Example:
-	postgres create-table \
+	bigquery create-table \
 	  --project-id=world-fishing \
 	  --sql="SELECT * FROM vessels;"
 `,

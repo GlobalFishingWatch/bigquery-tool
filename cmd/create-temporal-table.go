@@ -40,9 +40,9 @@ var createTemporalTableCmd = &cobra.Command{
 	Short: "Execute raw sql",
 	Long:  `Execute raw sql
 Format:
-	postgres create-temporal-table-sql --project-id= --sql= 
+	bigquery create-temporal-table-sql --project-id= --sql= 
 Example:
-	postgres create-temporal-table-sql \
+	bigquery create-temporal-table-sql \
 	  --project-id=world-fishing \
 	  --sql="SELECT * FROM vessels;"
 `,
