@@ -7,4 +7,5 @@ require (
 	github.com/cespare/reflex v0.3.0 // indirect
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/viper v1.8.1
+	google.golang.org/api v0.44.0
 )
