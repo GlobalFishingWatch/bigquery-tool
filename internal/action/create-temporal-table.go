@@ -3,16 +3,16 @@ package action
 import (
 	"cloud.google.com/go/bigquery"
 	"context"
-	"github.com/GlobalFishingWatch/bigquery-tool/internal/common"
 	"github.com/GlobalFishingWatch/bigquery-tool/types"
 	"log"
 	"time"
 )
 
+
 func ExecuteCreateTemporalTable(params types.ExecuteCreateTemporalTableParams) {
 	ctx := context.Background()
 
-	var bigQueryClient *bigquery.Client = common.CreateBigQueryClient(ctx, params.ProjectId)
+	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
 	defer bigQueryClient.Close()
 
 	createTemporalTable(ctx, bigQueryClient, params)
@@ -20,6 +20,7 @@ func ExecuteCreateTemporalTable(params types.ExecuteCreateTemporalTableParams) {
 
 
 func createTemporalTable(ctx context.Context, bigQueryClient *bigquery.Client, params types.ExecuteCreateTemporalTableParams) {
+	log.Printf("→ BQ →→ Query: %s", params.Query)
 	query := bigQueryClient.Query(params.Query)
 	query.AllowLargeResults = true
 
@@ -34,13 +35,18 @@ func createTemporalTable(ctx context.Context, bigQueryClient *bigquery.Client, p
 	}
 	log.Printf("→ BQ →→ Temporal table TTL: %v", ttlParsed)
 
-	err := dstTable.Create(ctx, &bigquery.TableMetadata{ExpirationTime: time.Now().Add(ttlParsed)})
+	var tableMetadata *bigquery.TableMetadata
+	tableMetadata = &bigquery.TableMetadata{ExpirationTime: time.Now().Add(ttlParsed)}
+
+	err := dstTable.Create(ctx, tableMetadata)
 	if err != nil {
 		log.Fatal("→ BQ →→ Error creating temporary table", err)
 	}
 
+	query.QueryConfig.Dst = dstTable
+	log.Println("→ BQ →→ Exporting query to intermediate table")
 	job, err := query.Run(context.Background())
-	common.CheckBigQueryJob(job, err)
+	checkBigQueryJob(job, err)
 	config, err := job.Config()
 	if err != nil {
 		log.Fatal("→ BQ →→ Error obtaining config", err)

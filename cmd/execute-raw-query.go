@@ -13,21 +13,11 @@ func init() {
 	executeRawQueryCmd.Flags().StringP("project-id", "", "", "The destination project id")
 	executeRawQueryCmd.MarkFlagRequired("project-id")
 
-	//createTableCmd.Flags().StringP("dataset-id", "", "", "The destination dataset")
-	//createTableCmd.MarkFlagRequired("dataset-id")
-	//
-	//createTableCmd.Flags().StringP("table-name", "", "", "The name of the destination table")
-	//createTableCmd.MarkFlagRequired("table-name")
-	//
 	executeRawQueryCmd.Flags().StringP("query", "", "", "The query to execute")
 	executeRawQueryCmd.MarkFlagRequired("query")
 
-
-
 	viper.BindPFlag("execute-raw-query", executeRawQueryCmd.Flags().Lookup("query"))
 	viper.BindPFlag("execute-raw-project-id", executeRawQueryCmd.Flags().Lookup("project-id"))
-	//viper.BindPFlag("create-table-dataset-id", createTableCmd.Flags().Lookup("dataset-id"))
-	//viper.BindPFlag("create-table-name", createTableCmd.Flags().Lookup("table-name"))
 
 	rootCmd.AddCommand(executeRawQueryCmd)
 }

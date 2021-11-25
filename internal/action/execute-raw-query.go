@@ -4,7 +4,6 @@ import (
 	"cloud.google.com/go/bigquery"
 	"context"
 	"encoding/json"
-	"github.com/GlobalFishingWatch/bigquery-tool/internal/common"
 	"github.com/GlobalFishingWatch/bigquery-tool/types"
 	"google.golang.org/api/iterator"
 	"log"
@@ -14,7 +13,7 @@ import (
 func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{} {
 	ctx := context.Background()
 
-	bigQueryClient := common.CreateBigQueryClient(ctx, params.ProjectId)
+	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
 	defer bigQueryClient.Close()
 
 	results := executeQuery(ctx, bigQueryClient, params)
