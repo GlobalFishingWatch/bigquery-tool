@@ -3,17 +3,14 @@ package action
 import (
 	"cloud.google.com/go/bigquery"
 	"context"
-	"github.com/GlobalFishingWatch/bigquery-tool/internal/common"
 	"github.com/GlobalFishingWatch/bigquery-tool/types"
 	"log"
 )
 
-var bigQueryClient *bigquery.Client
-
 func ExecuteCreateTable(params types.ExecuteCreateTableParams) {
 	ctx := context.Background()
 
-	bigQueryClient = common.CreateBigQueryClient(ctx, params.ProjectId)
+	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
 	defer bigQueryClient.Close()
 
 	createTable(ctx, params)
@@ -33,7 +30,7 @@ func createTable(ctx context.Context, params types.ExecuteCreateTableParams) {
 	}
 
 	job, err := query.Run(context.Background())
-	common.CheckBigQueryJob(job, err)
+	checkBigQueryJob(job, err)
 	config, err := job.Config()
 	if err != nil {
 		log.Fatal("→ BQ →→ Error obtaining config", err)
