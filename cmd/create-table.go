@@ -34,8 +34,8 @@ func init() {
 
 var createTableCmd = &cobra.Command{
 	Use:   "create-table",
-	Short: "Execute raw sql",
-	Long:  `Execute raw sql
+	Short: "Create table",
+	Long:  `Create table
 Format:
 	bigquery create-table --project-id= --sql= 
 Example:

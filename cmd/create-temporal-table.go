@@ -37,8 +37,8 @@ func init() {
 
 var createTemporalTableCmd = &cobra.Command{
 	Use:   "create-temporal-table",
-	Short: "Execute raw sql",
-	Long:  `Execute raw sql
+	Short: "Create temporal table",
+	Long:  `Create temporal table
 Format:
 	bigquery create-temporal-table-sql --project-id= --sql= 
 Example:

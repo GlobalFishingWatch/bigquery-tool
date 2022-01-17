@@ -7,7 +7,7 @@ import (
 	"log"
 )
 
-func ExecuteCreateTable(params types.ExecuteCreateTableParams) {
+func  ExecuteCreateTable(params types.ExecuteCreateTableParams) {
 	ctx := context.Background()
 
 	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
@@ -26,7 +26,7 @@ func createTable(ctx context.Context, params types.ExecuteCreateTableParams) {
 
 	err := dstTable.Create(ctx, &bigquery.TableMetadata{})
 	if err != nil {
-		log.Fatal("→ BQ →→ Error creating temporary table", err)
+		log.Fatal("→ BQ →→ Error creating table", err)
 	}
 
 	job, err := query.Run(context.Background())
@@ -36,6 +36,6 @@ func createTable(ctx context.Context, params types.ExecuteCreateTableParams) {
 		log.Fatal("→ BQ →→ Error obtaining config", err)
 	}
 	tempTable := config.(*bigquery.QueryConfig).Dst
-	log.Println("→ BQ →→ Temp table id", tempTable.TableID)
+	log.Println("→ BQ →→ Table id", tempTable.TableID)
 }
 
