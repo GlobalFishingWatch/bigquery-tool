@@ -1,25 +1,59 @@
 package action
 
 import (
-	"cloud.google.com/go/bigquery"
 	"context"
 	"encoding/json"
+	"log"
+	"time"
+
+	"cloud.google.com/go/bigquery"
 	"github.com/GlobalFishingWatch/bigquery-tool/types"
 	"google.golang.org/api/iterator"
-	"log"
 )
-
 
 func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{} {
 	ctx := context.Background()
 
 	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
 	defer bigQueryClient.Close()
-
-	results := executeQuery(ctx, bigQueryClient, params)
-	return results
+	if params.DestinationDataset != "" {
+		executeDestinationQuery(ctx, bigQueryClient, params)
+		return nil
+	} else {
+		results := executeQuery(ctx, bigQueryClient, params)
+		return results
+	}
 }
 
+func executeDestinationQuery(ctx context.Context, client *bigquery.Client, params types.ExecuteRawQueryParams) {
+
+	log.Printf("→ BQ →→ Executing query with destination table %s.%s", params.DestinationDataset, params.DestinationTable)
+	dstTable := client.Dataset(params.DestinationDataset).Table(params.DestinationTable)
+	query := client.Query(params.Query)
+	query.QueryConfig.Dst = dstTable
+	query.QueryConfig.WriteDisposition = bigquery.TableWriteDisposition(params.WriteDisposition)
+
+	job, err := query.Run(context.Background())
+	if err != nil {
+		log.Fatalf("→ BQ →→ Error running query %e", err)
+	}
+	for {
+		log.Println("→ BQ →→ Checking status of job")
+		status, err := job.Status(context.Background())
+		if err != nil {
+			log.Fatalf("→ BQ →→ Error obtaining status %e", err)
+		}
+		log.Println("→ BQ →→ Done:", status.Done())
+		if status.Done() {
+			if len(status.Errors) > 0 {
+				log.Fatalf("→ BQ →→ Error importing data %v", status.Errors)
+			}
+			break
+		}
+		time.Sleep(5 * time.Second)
+	}
+	log.Println("→ BQ →→ Query run correctly")
+}
 
 func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params types.ExecuteRawQueryParams) []map[string]interface{} {
 	query := bigQueryClient.Query(params.Query)
@@ -58,4 +92,3 @@ func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params t
 
 	return resultParsed
 }
-
