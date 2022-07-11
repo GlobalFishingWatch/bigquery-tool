@@ -9,7 +9,6 @@ import (
 	"log"
 )
 
-
 func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{} {
 	ctx := context.Background()
 
@@ -20,11 +19,10 @@ func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{
 	return results
 }
 
-
 func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params types.ExecuteRawQueryParams) []map[string]interface{} {
 	query := bigQueryClient.Query(params.Query)
 	query.AllowLargeResults = true
-
+	query.Dst = nil
 	log.Println("→ BQ →→ Executing query")
 	it, err := query.Read(ctx)
 	if err != nil {
@@ -58,4 +56,3 @@ func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params t
 
 	return resultParsed
 }
-
