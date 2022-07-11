@@ -62,6 +62,7 @@ func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params t
 	if params.DestinationTable == "" {
 		log.Println("→ BQ →→ Adding nil as destination table")
 		query.QueryConfig.Dst = nil
+		query.Dst = nil
 	}
 
 	log.Println("→ BQ →→ Executing query")
