@@ -58,12 +58,15 @@ func executeDestinationQuery(ctx context.Context, client *bigquery.Client, param
 func executeQuery(ctx context.Context, bigQueryClient *bigquery.Client, params types.ExecuteRawQueryParams) []map[string]interface{} {
 	query := bigQueryClient.Query(params.Query)
 	query.AllowLargeResults = true
-	query.Dst = nil
+
+	if params.DestinationTable == "" {
+		query.Dst = nil
+	}
 
 	log.Println("→ BQ →→ Executing query")
 	it, err := query.Read(ctx)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("→ BQ →→ %s", err)
 	}
 	var rows []map[string]bigquery.Value
 	for {
