@@ -22,12 +22,14 @@ func init() {
 	executeRawQueryCmd.Flags().StringP("destination-table", "", "", "The destination table")
 
 	executeRawQueryCmd.Flags().StringP("write-disposition", "", "WRITE_APPEND", "Specifies how existing data in the destination table is treated. Possible value (WRITE_EMPTY, WRITE_TRUNCATE, WRITE_APPEND)")
+	executeRawQueryCmd.Flags().StringP("executor-project", "", "", "")
 
 	viper.BindPFlag("execute-raw-query", executeRawQueryCmd.Flags().Lookup("query"))
 	viper.BindPFlag("execute-raw-project-id", executeRawQueryCmd.Flags().Lookup("project-id"))
 	viper.BindPFlag("execute-raw-destination-table", executeRawQueryCmd.Flags().Lookup("destination-table"))
 	viper.BindPFlag("execute-raw-destination-dataset", executeRawQueryCmd.Flags().Lookup("destination-dataset"))
 	viper.BindPFlag("execute-raw-write-disposition", executeRawQueryCmd.Flags().Lookup("write-disposition"))
+	viper.BindPFlag("execute-raw-executor-project", executeRawQueryCmd.Flags().Lookup("executor-project"))
 
 	rootCmd.AddCommand(executeRawQueryCmd)
 }
@@ -52,6 +54,10 @@ Example:
 			DestinationTable:   viper.GetString("execute-raw-destination-table"),
 			DestinationDataset: viper.GetString("execute-raw-destination-dataset"),
 			WriteDisposition:   viper.GetString("execute-raw-write-disposition"),
+			ExecutorProject:    viper.GetString("execute-raw-executor-project"),
+		}
+		if params.ExecutorProject == "" {
+			params.ExecutorProject = params.ProjectId
 		}
 		log.Println(params)
 

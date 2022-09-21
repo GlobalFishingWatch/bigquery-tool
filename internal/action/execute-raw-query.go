@@ -14,7 +14,7 @@ import (
 func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{} {
 	ctx := context.Background()
 
-	bigQueryClient = createBigQueryClient(ctx, params.ProjectId)
+	bigQueryClient = createBigQueryClient(ctx, params.ExecutorProject)
 	defer bigQueryClient.Close()
 	if params.DestinationDataset != "" {
 		executeDestinationQuery(ctx, bigQueryClient, params)
@@ -28,7 +28,13 @@ func ExecuteRawQuery(params types.ExecuteRawQueryParams) []map[string]interface{
 func executeDestinationQuery(ctx context.Context, client *bigquery.Client, params types.ExecuteRawQueryParams) {
 
 	log.Printf("→ BQ →→ Executing query with destination table %s.%s", params.DestinationDataset, params.DestinationTable)
-	dstTable := client.Dataset(params.DestinationDataset).Table(params.DestinationTable)
+	var dstTable *bigquery.Table
+	if params.ExecutorProject != params.ProjectId {
+		destinationClient := createBigQueryClient(ctx, params.ProjectId)
+		dstTable = destinationClient.Dataset(params.DestinationDataset).Table(params.DestinationTable)
+	} else {
+		dstTable = client.Dataset(params.DestinationDataset).Table(params.DestinationTable)
+	}
 	query := client.Query(params.Query)
 	query.QueryConfig.Dst = dstTable
 	query.QueryConfig.WriteDisposition = bigquery.TableWriteDisposition(params.WriteDisposition)

@@ -6,4 +6,5 @@ type ExecuteRawQueryParams struct {
 	DestinationTable   string
 	DestinationDataset string
 	WriteDisposition   string
+	ExecutorProject    string
 }
