@@ -1,11 +1,11 @@
-FROM golang:1.14-alpine as development
+FROM golang:1.18-alpine as development
 
 ENV CGO_ENABLED=1
 
 WORKDIR /go/src/app
 
 RUN apk update && apk add git
-RUN go get github.com/cespare/reflex
+RUN go install github.com/cespare/reflex@latest
 COPY . .
 RUN go build -o bigquery-tool main.go
 
